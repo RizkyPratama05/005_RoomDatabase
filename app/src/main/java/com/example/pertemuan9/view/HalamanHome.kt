@@ -1,5 +1,6 @@
 package com.example.pertemuan9.view
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,12 +35,12 @@ import com.example.pertemuan9.room.Siswa
 import com.example.pertemuan9.view.route.DestinasiHome
 import com.example.pertemuan9.viewmodel.HomeViewModel
 import com.example.pertemuan9.viewmodel.provider.PenyediaViewModel
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     navigateToItemEntry: () -> Unit,
+    navigateToItemUpdate: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ){
@@ -67,7 +68,9 @@ fun HomeScreen(
         val uiStateSiswa by viewModel.homUiState.collectAsState()
         BodyHome(
             itemSiswa = uiStateSiswa.listSiswa,
-            modifier = Modifier.padding(innerPadding)
+            OnSiswaClicked = navigateToItemUpdate ,
+            modifier = Modifier
+                .padding(innerPadding)
                 .fillMaxSize()
         )
 
@@ -77,7 +80,8 @@ fun HomeScreen(
 @Composable
 fun BodyHome(
     itemSiswa: List<Siswa>,
-    modifier : Modifier = Modifier
+    modifier: Modifier = Modifier,
+    OnSiswaClicked: (Int) -> Unit
 ){
 
     if (itemSiswa.isEmpty()){
@@ -90,7 +94,8 @@ fun BodyHome(
     else{
         ListSiswa(
             itemSiswa = itemSiswa,
-            modifier = modifier.padding(horizontal = 8.dp)
+            modifier = modifier.padding(horizontal = 8.dp),
+            OnSiswaClicked = { OnSiswaClicked(it.id) }
         )
     }
 
@@ -99,6 +104,7 @@ fun BodyHome(
 @Composable
 fun ListSiswa(
     itemSiswa: List<Siswa>,
+    OnSiswaClicked: (Siswa) -> Unit,
     modifier: Modifier = Modifier
 ){
     LazyColumn(modifier = modifier) {
@@ -107,6 +113,7 @@ fun ListSiswa(
             siswa = person,
             modifier = Modifier
                 .padding(all = 8.dp)
+                .clickable { OnSiswaClicked(person) }
         )
         }
 

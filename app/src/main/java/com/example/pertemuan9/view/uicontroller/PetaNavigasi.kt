@@ -36,6 +36,10 @@ fun HostNavigasi(
         composable(DestinasiHome.route){
             HomeScreen(
                 navigateToItemEntry =  {navController.navigate(DestinasiEntry.route)},
+
+                navigateToItemUpdate = {
+                    navController.navigate(route = "${DestinasiDetailSiswa.route}/${it}")
+                }
             )
         }
         composable(DestinasiEntry.route){
